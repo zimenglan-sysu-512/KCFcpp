@@ -66,7 +66,9 @@ inline t y2(const cv::Rect_<t> &rect)
 template <typename t>
 inline void resize(cv::Rect_<t> &rect, float scalex, float scaley = 0)
 {
-    if (!scaley)scaley = scalex;
+    if (!scaley) {
+        scaley = scalex;
+    }
     rect.x -= rect.width * (scalex - 1.f) / 2.f;
     rect.width *= scalex;
 
@@ -78,8 +80,12 @@ inline void resize(cv::Rect_<t> &rect, float scalex, float scaley = 0)
 template <typename t>
 inline void limit(cv::Rect_<t> &rect, cv::Rect_<t> limit)
 {
-    if (rect.x + rect.width > limit.x + limit.width)rect.width = (limit.x + limit.width - rect.x);
-    if (rect.y + rect.height > limit.y + limit.height)rect.height = (limit.y + limit.height - rect.y);
+    if (rect.x + rect.width > limit.x + limit.width) {
+        rect.width = (limit.x + limit.width - rect.x);
+    }
+    if (rect.y + rect.height > limit.y + limit.height) {
+        rect.height = (limit.y + limit.height - rect.y);
+    }
     if (rect.x < limit.x)
     {
         rect.width -= (limit.x - rect.x);
@@ -90,8 +96,12 @@ inline void limit(cv::Rect_<t> &rect, cv::Rect_<t> limit)
         rect.height -= (limit.y - rect.y);
         rect.y = limit.y;
     }
-    if(rect.width<0)rect.width=0;
-    if(rect.height<0)rect.height=0;
+    if(rect.width<0) {
+        rect.width=0;
+    }
+    if(rect.height<0) {
+        rect.height=0;
+    }
 }
 
 template <typename t>
@@ -116,7 +126,9 @@ inline cv::Mat subwindow(const cv::Mat &in, const cv::Rect & window, int borderT
 {
     cv::Rect cutWindow = window;
     RectTools::limit(cutWindow, in.cols, in.rows);
-    if (cutWindow.height <= 0 || cutWindow.width <= 0)assert(0); //return cv::Mat(window.height,window.width,in.type(),0) ;
+    if (cutWindow.height <= 0 || cutWindow.width <= 0) {
+        assert(0); //return cv::Mat(window.height,window.width,in.type(),0) ;
+    }
     cv::Rect border = RectTools::getBorder(window, cutWindow);
     cv::Mat res = in(cutWindow);
 
@@ -129,7 +141,7 @@ inline cv::Mat subwindow(const cv::Mat &in, const cv::Rect & window, int borderT
 
 inline cv::Mat getGrayImage(cv::Mat img)
 {
-    cv::cvtColor(img, img, CV_BGR2GRAY);
+    cv::cvtColor(img, img, cv::COLOR_BGR2GRAY); // CV_BGR2GRAY);
     img.convertTo(img, CV_32F, 1 / 255.f);
     return img;
 }
